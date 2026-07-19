@@ -1,3 +1,608 @@
+# CostFlow — Product Requirements Document
+
+---
+
+## 1. Project Identity
+
+| Field | Value |
+|-------|-------|
+| **Project Name** | CostFlow |
+| **Project ID** | PRD-001 |
+| **Version** | v1.0 |
+| **Status** | Draft |
+| **Priority** | High |
+| **Created Date** | July 18, 2026 |
+| **Last Updated** | July 18, 2026 |
+| **Owner** | Mohamed Eldeeb |
+| **Team Members** | Frontend Developer, Backend Developer, Designer, QA Engineer |
+| **Tech Stack** | React 18 + TypeScript + Tailwind CSS (Frontend); Node.js + Express + TypeScript + Prisma (Backend); PostgreSQL + Redis (Database) |
+| **Repository** | [TBD] |
+| **Git Branch Prefix** | PRD-feature-name |
+| **PRD File Path** | docs/PRD.md |
+
+---
+
+## 2. Problem & Purpose
+
+### Problem Statement
+SaaS founders using AI APIs (OpenAI, Anthropic, etc.) cannot see which customers or features are driving costs. They only see total monthly bills, causing them to miss unprofitable accounts, waste money on expensive features, and fail to forecast spending. For example, a customer paying $20/month may cost $35/month in API usage, appearing as revenue while creating a loss.
+
+### Project Purpose
+CostFlow provides AI SaaS founders with granular visibility into API costs by customer and feature, enabling them to identify and eliminate unprofitable accounts, optimize expensive features, and forecast next month's bill.
+
+### Business Value
+- **Protects margins** by identifying customers who cost more than they pay
+- **Enables profitable scaling** by showing which features and customers drive profitability
+- **Forecasts spending** to prevent bill surprises
+- **Reduces operational waste** by pinpointing expensive, inefficient features
+
+### Opportunity
+The AI SaaS market is growing rapidly, and API costs are the largest variable expense for these companies. Current solutions (provider dashboards, basic analytics) lack business context and profitability insight. CostFlow fills this gap by combining usage data with revenue and subscription information.
+
+---
+
+## 3. Goals & Objectives
+
+### Primary Goal
+Deliver a working MVP by September 30, 2026 that lets AI SaaS founders track API costs by customer and feature, identify unprofitable accounts, and set spending alerts.
+
+### Objectives
+1. Enable developers to integrate CostFlow with a simple SDK or REST API in under 10 minutes
+2. Provide a dashboard that shows cost by customer, feature, and date with zero manual configuration
+3. Send budget alerts when spending exceeds defined thresholds
+4. Allow founders to export spending data in CSV format for further analysis
+5. Support OpenAI API pricing models and auto-update pricing as rates change
+
+### Success Definition
+- **Launch:** MVP deployed and available for beta signups
+- **Adoption:** 50+ beta users within 30 days of launch
+- **Activation:** 30+ active projects tracking real API spending
+- **Engagement:** Average 3+ logins per week per user
+- **Retention:** 60%+ of beta users active after 30 days
+
+### Non-Goals
+- Multi-provider support in v1 (deferred to v2)
+- Cost forecasting and predictive analytics
+- Model recommendations or optimization suggestions
+- Team collaboration features or role-based access
+- Custom dashboard builder
+- Webhook integrations or external automation
+
+---
+
+## 4. Scope
+
+### In Scope — v1 MVP
+- User authentication (email/password)
+- Project creation and API key management
+- OpenAI API event ingestion via REST endpoint or SDK
+- Cost calculation based on real-time OpenAI pricing
+- Dashboard: Cost by customer (daily and monthly)
+- Dashboard: Cost by feature (daily and monthly)
+- Dashboard: Total spending and trends
+- Budget alerts via email
+- CSV export of spending data
+- Seven days of historical data retention
+- Basic error handling and retry logic
+
+### Out of Scope — Deferred to v2
+- Anthropic, Gemini, ElevenLabs, and other provider integrations
+- Profitability analysis (revenue vs. cost per customer)
+- Real-time alerts via Slack or Discord
+- Anomaly detection (spike alerts)
+- Cost forecasting and predictions
+- Model recommendations engine
+- Team access and role-based permissions
+- Custom reporting and dashboard builder
+- Webhooks and third-party integrations
+- Advanced security features (SAML, SSO)
+- Mobile app or native clients
+
+### Assumptions
+- AI SaaS founders use OpenAI as their primary API provider
+- Integration friction is the biggest barrier to adoption; developers will prefer an SDK
+- Email alerts are sufficient for MVP; Slack integration can wait
+- Profitability analysis requires revenue data that most customers don't want to share initially
+- Historical pricing data and current rate cards are available from OpenAI's public documentation
+
+### Constraints
+- No budget for marketing or paid customer acquisition in v1
+- Team size is lean; feature set must be achievable in 8 weeks
+- Must avoid storing sensitive customer prompts or private data
+- Pricing database must be kept current without manual updates
+- Infrastructure costs must scale with customer usage
+
+### Dependencies
+- OpenAI API and pricing rate card stability
+- Third-party email service (SendGrid, AWS SES)
+- PostgreSQL and Redis hosting (Vercel Postgres, Railway, or similar)
+- GitHub for repository and CI/CD
+- Staging environment must mirror production
+
+---
+
+## 5. Users & Personas
+
+### Primary User — AI SaaS Founder
+
+| Attribute | Details |
+|-----------|---------|
+| **Name** | Alex (AI SaaS Founder) |
+| **Role** | Technical founder or VP of Product |
+| **Goal** | Understand which customers and features are profitable so they can make pricing, optimization, and feature decisions |
+| **Pain Point** | API bills are exploding but they can't see which customers or features are causing the cost — only the total monthly amount |
+| **Tech Level** | High (can read API documentation, integrate SDKs) |
+| **Frequency** | Daily or weekly spending checks |
+| **Success Definition** | Can identify top 5 most expensive customers and features within 2 minutes; receives alerts before overspending occurs |
+
+### Secondary User — Finance/Operations Lead
+
+| Attribute | Details |
+|-----------|---------|
+| **Name** | Jordan (Finance Lead) |
+| **Role** | CFO, Finance Manager, or Operations Manager |
+| **Goal** | Get visibility into current and forecasted API costs to improve financial planning and margin forecasts |
+| **Pain Point** | Cannot allocate costs to projects or customers; surprises from overspending harm profitability |
+| **Tech Level** | Low to Medium (prefers dashboards over APIs) |
+| **Frequency** | Weekly or monthly review |
+| **Success Definition** | Can export spending reports and understand which customers are profitable without asking the founder |
+
+---
+
+## 6. MoSCoW Feature Prioritization
+
+### Must Have — P0 (Critical for MVP)
+
+| ID | Feature | Status | Description | Assigned To | Sprint |
+|---|---------|--------|-------------|------------|--------|
+| P0-F001 | User Authentication | TODO | Email/password signup and login with session management | Backend Dev | Phase 1 |
+| P0-F002 | Project Management | TODO | Create, list, and delete projects; generate and manage API keys | Backend Dev | Phase 1 |
+| P0-F003 | OpenAI Event Ingestion | TODO | REST endpoint to receive usage events (customer, feature, model, tokens, cost) | Backend Dev | Phase 1 |
+| P0-F004 | Cost Calculation Engine | TODO | Parse events and calculate estimated cost based on current OpenAI pricing | Backend Dev | Phase 1 |
+| P0-F005 | Cost by Customer Dashboard | TODO | Display total cost, revenue, margin, and trends per customer (daily/monthly) | Frontend Dev | Phase 2 |
+| P0-F006 | Cost by Feature Dashboard | TODO | Display total cost and usage per feature (daily/monthly) | Frontend Dev | Phase 2 |
+| P0-F007 | Budget Alerts | TODO | Send email when spending exceeds user-defined daily or monthly limit | Backend Dev | Phase 3 |
+| P0-F008 | CSV Export | TODO | Export spending data by customer and feature for external analysis | Backend Dev | Phase 3 |
+
+### Should Have — P1 (Important for Usability)
+
+| ID | Feature | Status | Description | Assigned To | Sprint |
+|---|---------|--------|-------------|------------|--------|
+| P1-F001 | Cost by Provider/Model | TODO | Breakdown of spending by OpenAI model and token usage | Frontend Dev | Phase 2 |
+| P1-F002 | Profitability Analysis | TODO | Compare API cost vs. subscription revenue per customer; show gross margin | Backend Dev + Frontend Dev | Phase 3 |
+| P1-F003 | Slack/Discord Alerts | TODO | Send real-time budget and spending alerts to Slack or Discord | Backend Dev | Phase 3 |
+| P1-F004 | Anomaly Detection | TODO | Alert on sudden token spikes, unusual customer behavior, or cost increases | Backend Dev | Phase 4 |
+| P1-F005 | Spending Trends Graph | TODO | Visualize cost trends over time (7-day, 30-day view) | Frontend Dev | Phase 3 |
+
+### Could Have — P2 (Nice to Have)
+
+| ID | Feature | Status | Description | Assigned To | Sprint |
+|---|---------|--------|-------------|------------|--------|
+| P2-F001 | Dark Mode | TODO | Toggle dark/light theme in dashboard | Frontend Dev | Phase 4 |
+| P2-F002 | Keyboard Shortcuts | TODO | Quick navigation and export via keyboard | Frontend Dev | Phase 4 |
+| P2-F003 | Bulk Actions | TODO | Bulk import events or update multiple budgets at once | Backend Dev | Phase 4 |
+
+### Won't Have — P3 (Deferred to v2)
+
+| ID | Feature | Status | Description | Reason |
+|---|---------|--------|-------------|--------|
+| P3-F001 | Multi-Provider Integration | DEFERRED | Support Anthropic, Gemini, ElevenLabs, and other providers | Out of scope for v1; requires separate pricing integrations and testing |
+| P3-F002 | Cost Forecasting | DEFERRED | Predict end-of-month spending and future costs | Requires historical data and ML; can be added after v1 validation |
+| P3-F003 | Model Recommendations | DEFERRED | Suggest cheaper models or prompt optimizations | Requires domain expertise and user feedback; v2 feature |
+| P3-F004 | Team Access | DEFERRED | Multi-user support, roles, and permissions | Adds complexity; single-user MVP is sufficient for testing |
+| P3-F005 | Custom Reports | DEFERRED | Build and schedule custom reports | Dashboard + CSV export is sufficient for v1 |
+| P3-F006 | Webhooks | DEFERRED | Send events to external systems | Out of scope; consider in v2 based on customer requests |
+
+---
+
+## 7. Functional Requirements
+
+### P0-F001: User Authentication
+
+**Description**  
+Users can create an account with email and password, log in securely, and maintain authenticated sessions.
+
+**User Story**  
+As an AI SaaS founder, I want to sign up for CostFlow with my email and password so that I can access my project dashboard securely.
+
+**Trigger**  
+User navigates to signup page or login page.
+
+**Pre-conditions**
+- User has a valid email address
+- Email has not been registered before (for signup)
+- User is not already logged in
+
+**Post-conditions**
+- User is authenticated and can access their dashboard
+- Session token is created and stored securely
+- User is redirected to project list or dashboard
+
+**Main Flow**
+1. User clicks "Sign Up" or "Log In"
+2. User enters email and password
+3. System validates email format and password strength (minimum 8 characters, no weak passwords)
+4. System checks if email exists (signup) or if credentials match (login)
+5. On success, system creates session token (JWT with 7-day expiration)
+6. User is redirected to projects dashboard
+7. Session cookie is set (HttpOnly, Secure, SameSite=Strict)
+
+**Alternate Flows**
+- **Invalid email format:** System shows inline error; user corrects and resubmits
+- **Password too weak:** System rejects and suggests requirements
+- **Email already registered (signup):** System prompts user to log in instead
+- **Credentials not found (login):** System shows generic error "Email or password incorrect"
+- **Session expired:** User is redirected to login; message "Session expired, please log in again"
+
+**Acceptance Criteria**
+- [ ] Users can sign up with email and password
+- [ ] Password must be at least 8 characters long
+- [ ] Passwords are hashed using bcrypt (salt rounds ≥ 10)
+- [ ] Users can log in with correct credentials
+- [ ] Users receive error message for incorrect credentials (no account enumeration)
+- [ ] Sessions expire after 7 days of inactivity
+- [ ] Session tokens are JWT-based and cryptographically signed
+- [ ] Cookies use HttpOnly and Secure flags
+- [ ] Signup confirms email (link sent to inbox)
+- [ ] Password reset flow works end-to-end
+- [ ] Failed login attempts are rate-limited (max 5 per minute per IP)
+
+---
+
+### P0-F002: Project Management
+
+**Description**  
+Users can create multiple projects, each with a unique API key and name. Projects organize customer and feature data.
+
+**User Story**  
+As a founder with multiple AI products, I want to create separate projects in CostFlow so that I can track costs for each product independently.
+
+**Trigger**  
+User clicks "Create Project" or views project list.
+
+**Pre-conditions**
+- User is logged in
+- User has not reached project limit (3 projects for v1)
+
+**Post-conditions**
+- New project is created with unique API key
+- Project appears in user's project list
+- API key is displayed once and can be regenerated
+- User is redirected to project dashboard
+
+**Main Flow**
+1. User clicks "Create Project"
+2. User enters project name (e.g., "My AI Assistant")
+3. System validates name (non-empty, unique per user, max 100 characters)
+4. System generates unique API key (32+ character random string)
+5. System creates project and stores in database
+6. System displays API key with warning "Copy this key now; we won't show it again"
+7. User can copy to clipboard or regenerate key
+8. User is redirected to project dashboard
+
+**Alternate Flows**
+- **Project limit reached:** System shows error "You have reached the 3-project limit"; suggest upgrading plan
+- **Regenerate key:** User clicks "Regenerate API Key"; system generates new key and invalidates old one (existing events still valid)
+- **Delete project:** User clicks "Delete Project"; system prompts for confirmation; if confirmed, project and all data are deleted after 7-day retention period
+
+**Acceptance Criteria**
+- [ ] Users can create up to 3 projects in v1
+- [ ] Each project has a unique, randomly generated API key
+- [ ] Project names are unique per user and between 1–100 characters
+- [ ] API keys are not displayed in project list; only in creation or regeneration
+- [ ] Users can regenerate API keys without losing historical data
+- [ ] Deleted projects are soft-deleted (retention for 7 days, then purged)
+- [ ] Project list shows creation date, last active date, and event count
+- [ ] Users can rename projects
+- [ ] Users cannot access other users' projects (authorization check)
+
+---
+
+### P0-F003: OpenAI Event Ingestion
+
+**Description**  
+An API endpoint that receives usage events from the user's application. Events contain customer, feature, model, token counts, and metadata.
+
+**User Story**  
+As a developer, I want to send a simple JSON event to CostFlow every time my application calls OpenAI so that my costs are automatically tracked.
+
+**Trigger**  
+User's application sends a POST request to `/api/v1/events` with a valid API key and event payload.
+
+**Pre-conditions**
+- User has a valid project and API key
+- Event payload is valid JSON
+- Request includes Authorization header with API key
+
+**Post-conditions**
+- Event is stored in database
+- Cost is calculated based on token counts and current OpenAI pricing
+- Event appears in dashboard within 1 minute
+
+**Main Flow**
+1. User's application calls OpenAI API
+2. After response, application sends event to CostFlow:
+   ```
+   POST /api/v1/events
+   Authorization: Bearer <API_KEY>
+   Content-Type: application/json
+   
+   {
+     "customer_id": "cust_278",
+     "feature": "pdf_summary",
+     "provider": "openai",
+     "model": "gpt-4",
+     "input_tokens": 42000,
+     "output_tokens": 3200,
+     "request_id": "req_913",
+     "timestamp": "2026-07-18T12:00:00Z",
+     "metadata": {
+       "plan": "pro",
+       "workspace_id": "workspace_42"
+     }
+   }
+   ```
+3. System validates API key against project
+4. System validates event schema (required fields: customer_id, feature, provider, model, input_tokens, output_tokens)
+5. System looks up current OpenAI pricing for the model
+6. System calculates cost: (input_tokens * input_price + output_tokens * output_price) / 1000
+7. System stores event with calculated cost in database
+8. System returns 202 Accepted
+
+**Alternate Flows**
+- **Invalid API key:** System returns 401 Unauthorized; no event stored
+- **Malformed payload:** System returns 400 Bad Request with error details
+- **Missing required fields:** System returns 400 with list of missing fields
+- **Unknown model:** System returns 400; suggests valid models
+- **Rate limit exceeded:** System returns 429; indicates retry-after header
+- **Database error:** System returns 500; event is queued for retry
+
+**Acceptance Criteria**
+- [ ] API endpoint accepts POST requests at `/api/v1/events`
+- [ ] Endpoint requires valid API key in Authorization header
+- [ ] Event schema is validated (customer_id, feature, provider, model, tokens required)
+- [ ] Cost is calculated using current OpenAI pricing
+- [ ] Historical pricing is used if model price changes (events timestamped)
+- [ ] Batch event ingestion is supported (array of events)
+- [ ] Endpoint returns 202 Accepted on success
+- [ ] Failed events are logged and can be retried
+- [ ] Rate limiting: 1,000 events per minute per API key
+- [ ] Events appear in dashboard within 60 seconds
+- [ ] Duplicate events (same request_id) are ignored
+- [ ] Sensitive data (prompts, responses) are not stored; only metadata
+
+---
+
+### P0-F004: Cost Calculation Engine
+
+**Description**  
+System calculates API costs based on token counts and OpenAI's current pricing. Pricing is updated regularly to reflect rate changes.
+
+**User Story**  
+As a founder, I want CostFlow to automatically calculate the cost of each API call so that I don't have to manually compute pricing.
+
+**Trigger**  
+Event is ingested via `/api/v1/events` endpoint.
+
+**Pre-conditions**
+- Event contains model name and token counts
+- Current OpenAI pricing is available in system
+
+**Post-conditions**
+- Cost is calculated and stored with event
+- Cost is visible in dashboard
+
+**Main Flow**
+1. Event is received with model name, input_tokens, output_tokens
+2. System queries pricing database for model and current rates:
+   ```
+   model: "gpt-4"
+   input_price: $0.03 per 1K tokens
+   output_price: $0.06 per 1K tokens
+   ```
+3. System calculates:
+   ```
+   input_cost = (input_tokens / 1000) * input_price
+   output_cost = (output_tokens / 1000) * output_price
+   total_cost = input_cost + output_cost
+   ```
+4. System stores cost with event in database
+5. System updates customer and feature cost aggregates (cached for dashboard speed)
+
+**Alternate Flows**
+- **Model pricing not found:** System returns error; event is stored with cost = null pending pricing update
+- **Pricing changes during month:** System stores historical pricing with each event; older events use old pricing, new events use new pricing
+- **Batch calculation:** If user uploads historical events, system calculates cost for all using rates from their respective dates
+
+**Acceptance Criteria**
+- [ ] Cost is calculated as (input_tokens / 1000) * input_price + (output_tokens / 1000) * output_price
+- [ ] Pricing database includes all OpenAI models (GPT-4, GPT-3.5, etc.)
+- [ ] Pricing is updated within 24 hours of OpenAI rate changes
+- [ ] Historical pricing is maintained (cost uses price from event date, not current price)
+- [ ] Cost precision is 4 decimal places ($0.0001)
+- [ ] Zero-token events are handled (cost = $0)
+- [ ] Unknown models are flagged and escalated to admin
+
+---
+
+### P0-F005: Cost by Customer Dashboard
+
+**Description**  
+Dashboard section displaying total API cost, subscription revenue, gross profit, and margin per customer. Enables identification of unprofitable accounts.
+
+**User Story**  
+As a founder, I want to see which customers cost me the most and which are unprofitable so that I can decide whether to optimize, limit, or sunset their access.
+
+**Trigger**  
+User logs in and navigates to project dashboard.
+
+**Pre-conditions**
+- Project has received at least one event
+- Customer data is aggregated in database
+
+**Post-conditions**
+- Dashboard displays customer cost breakdown
+- Table is sortable and filterable
+
+**Main Flow**
+1. System queries database for all customers in project
+2. For each customer, system calculates:
+   - Total cost (sum of all event costs)
+   - Usage trend (daily costs over last 7 days)
+   - Request count (number of events)
+3. System displays table:
+   | Customer | Total Cost | Usage Trend | Request Count | Actions |
+   |----------|------------|------------|---------------|---------|
+4. User can click on customer to see feature breakdown
+5. User can sort by cost (descending), trend (highest growth), or request count
+6. Data is cached and refreshed every 5 minutes
+
+**Alternate Flows**
+- **No customers yet:** System shows empty state with instruction to send first event
+- **Filter by date range:** User selects date range (last 7 days, 30 days, custom); dashboard recalculates
+- **Export to CSV:** User clicks "Export"; system generates CSV of customer costs
+
+**Acceptance Criteria**
+- [ ] Dashboard displays customer name, total cost, request count
+- [ ] Table is sortable by cost (ascending/descending), date added, and activity
+- [ ] Table is paginated (50 customers per page)
+- [ ] Data is updated within 5 minutes of event ingestion
+- [ ] User can filter by date range (last 7/30/90 days or custom)
+- [ ] User can drill down into customer to see feature breakdown
+- [ ] Trend sparkline shows cost over last 7 days
+- [ ] Loading state is shown during data fetch
+- [ ] No data error state is shown if project has no events
+
+---
+
+### P0-F006: Cost by Feature Dashboard
+
+**Description**  
+Dashboard section displaying total API cost per feature. Enables prioritization of optimization efforts.
+
+**User Story**  
+As a founder, I want to see which features are most expensive so that I can optimize, limit, or charge more for them.
+
+**Trigger**  
+User logs in and navigates to project dashboard.
+
+**Pre-conditions**
+- Project has received at least one event
+- Feature data is aggregated in database
+
+**Post-conditions**
+- Dashboard displays feature cost breakdown
+- Table is sortable and filterable
+
+**Main Flow**
+1. System queries database for all features in project
+2. For each feature, system calculates:
+   - Total cost (sum of all event costs)
+   - Usage trend (daily costs over last 7 days)
+   - Request count (number of events)
+   - Average cost per request (total cost / request count)
+3. System displays table:
+   | Feature | Total Cost | Requests | Avg Cost/Request | Trend |
+   |---------|------------|----------|------------------|--------|
+4. User can sort by cost, request count, or average cost per request
+5. User can click feature to see customer breakdown
+6. Data is cached and refreshed every 5 minutes
+
+**Alternate Flows**
+- **No features yet:** System shows empty state
+- **Filter by date range:** User selects date range; dashboard recalculates
+- **Export to CSV:** User clicks "Export"; system generates CSV of feature costs
+
+**Acceptance Criteria**
+- [ ] Dashboard displays feature name, total cost, request count, average cost per request
+- [ ] Table is sortable by cost, request count, and average cost
+- [ ] Table is paginated (50 features per page)
+- [ ] Data is updated within 5 minutes of event ingestion
+- [ ] User can filter by date range
+- [ ] User can drill down to see which customers use each feature
+- [ ] Trend sparkline shows cost over last 7 days
+- [ ] Loading state is shown during data fetch
+
+---
+
+### P0-F007: Budget Alerts
+
+**Description**  
+System sends email alerts when project spending exceeds user-defined daily or monthly budget limits.
+
+**User Story**  
+As a founder, I want to set a monthly budget and receive an email alert when I'm approaching or exceeding it so that I can prevent overspending.
+
+**Trigger**  
+User sets budget limit in settings, or daily/monthly spend triggers limit.
+
+**Pre-conditions**
+- User has set a budget limit (daily or monthly)
+- Project has been receiving events
+
+**Post-conditions**
+- Alert email is sent to user
+- Alert is logged in system
+
+**Main Flow**
+1. User navigates to Project Settings → Budget Alerts
+2. User sets:
+   - Monthly budget: $500
+   - Alert threshold: 80% ($400)
+3. System stores budget configuration
+4. Each hour, system calculates current month's spending
+5. If spending ≥ 80% threshold:
+   - System sends email: "Your API spending has reached $400 (80% of your $500 budget)"
+   - System records alert sent (prevents duplicate emails)
+6. If spending ≥ 100% threshold:
+   - System sends urgent email: "You have exceeded your $500 budget. Current spending: $520"
+   - System records alert sent
+
+**Alternate Flows**
+- **Daily budget:** User sets daily limit; system checks every hour; alerts on threshold and overage
+- **Disable alerts:** User can toggle alerts on/off per project
+- **Snooze alerts:** User can snooze notifications for 24 hours after receiving first alert
+
+**Acceptance Criteria**
+- [ ] Users can set daily and/or monthly budget limits
+- [ ] Users can set alert thresholds (50%, 75%, 90%, 100%)
+- [ ] Alerts are sent via email to project owner
+- [ ] Duplicate alerts are prevented (only one email per day per threshold per project)
+- [ ] Alerts include current spend, budget limit, and percentage used
+- [ ] Alerts are timestamped and logged in database
+- [ ] Users can view alert history in dashboard
+- [ ] Users can disable alerts per project or globally
+- [ ] Alert calculation is accurate to 2 decimal places
+
+---
+
+### P0-F008: CSV Export
+
+**Description**  
+Users can export spending data by customer and feature in CSV format for further analysis in Excel or data tools.
+
+**User Story**  
+As a founder, I want to export my spending data as CSV so that I can analyze it in Excel or share it with my finance team.
+
+**Trigger**  
+User clicks "Export" button on customer or feature dashboard.
+
+**Pre-conditions**
+- Project has received at least one event
+
+**Post-conditions**
+- CSV file is generated and downloaded to user's device
+
+**Main Flow**
+1. User navigates to Cost by Customer or Cost by Feature dashboard
+2. User selects date range (optional; defaults to last 30 days)
+3. User clicks "Export as CSV"
+4. System queries database for all events in date range
+5. System generates CSV file with columns:
+   ```
+   customer_id, feature, date, model, input_tokens, output_tokens, cost
+   cust_001, pdf_summary, 2026-07-18, gpt-4, 42000, 3200, 0.18
+   ```
 6. System sends file to browser for download
 7. File is named: `costflow_export_2026-07-18.csv`
 
