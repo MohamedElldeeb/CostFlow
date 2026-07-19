@@ -1,0 +1,38 @@
+{
+  "name": "costflow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev.ps1",
+    "dev:server": "tsc --watch --preserveWatchOutput",
+    "dev:client": "vite",
+    "build:server": "tsc",
+    "build:scripts": "tsc --project tsconfig.scripts.json",
+    "build:client": "vite build",
+    "build": "npm run build:server && npm run build:client",
+    "migrate": "npm run build:server && node dist-server/server/db.js",
+    "seed": "npm run build:scripts && node dist-server/scripts/seed.js",
+    "start": "node scripts/start.mjs",
+    "test": "node --test dist-server/**/*.test.js",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "bcryptjs": "3.0.3",
+    "better-sqlite3": "12.11.1",
+    "jsonwebtoken": "9.0.3",
+    "nodemailer": "9.0.3",
+    "vite": "8.1.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "@types/better-sqlite3": "7.6.13",
+    "@types/jsonwebtoken": "9.0.10",
+    "@types/node": "22.19.15",
+    "@types/nodemailer": "8.0.1",
+    "typescript": "5.9.3"
+  }
+}

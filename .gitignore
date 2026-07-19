@@ -1,0 +1,28 @@
+# Runtime data and generated secrets
+data/
+
+# Dependencies and build output
+node_modules/
+dist/
+dist-server/
+coverage/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Playwright output
+playwright-report/
+test-results/

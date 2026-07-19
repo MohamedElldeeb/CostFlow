@@ -708,7 +708,7 @@ User clicks "Export" button on customer or feature dashboard.
 - **Deployment:** Vercel with automatic deployments on main branch
 
 ### Backend Stack
-- **Runtime:** Node.js 18 LTS with TypeScript
+- **Runtime:** Node.js 22 LTS (22.12+) with TypeScript
 - **Framework:** Express with middleware (helmet for security, cors, express-validator for input validation)
 - **Database ORM:** Prisma with TypeScript types
 - **Authentication:** JWT with RS256 signing; refresh token rotation every 7 days
